@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "132551107059",
+    "firebase_url": "https://thedailygerth-default-rtdb.firebaseio.com",
+    "project_id": "thedailygerth",
+    "storage_bucket": "thedailygerth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132551107059:android:554b37affff1498b3a3286",
+        "android_client_info": {
+          "package_name": "com.thedailygerth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132551107059-c6vph8h98ij2kithmu8neivqcpqt429h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGjezvKTwGxVHcSgKrnnz1QzPxGyTjifQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132551107059-c6vph8h98ij2kithmu8neivqcpqt429h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
