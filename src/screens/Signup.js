@@ -1,29 +1,49 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import auth from '@react-native-firebase/auth'
 
+const isUnique = (username) => {
+    return true
+}
+
 const Signup = ({ navigation }) => {
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState('')
 
+    useEffect(() => {
+        console.log(error)
+    }, [error])
+
     const handleSignUp = () => {
-        if (password && confirmPassword) {
+        if (username && email && password && confirmPassword) {
             if (password === confirmPassword) {
-                auth()
-                    .createUserWithEmailAndPassword(email, password)
-                    .then(() => navigation.navigate('Main'))
-                    .catch(err => {
-                        // setError(err.message)
-                        if (err.code === 'auth/invalid-email') {
-                            setError('Enter a valid email address')
-                        } else if (err.code === 'auth/weak-password') {
-                            setError('Invalid password. Password should be at least 6 characters')
-                        } else {
-                            setError('Error creating account.')
-                        }
-                    })
+                if (isUnique(username)) {
+                    auth()
+                        .createUserWithEmailAndPassword(email, password)
+                        .then(() => {
+                            auth().currentUser.updateProfile({
+                                displayName: username
+                            })
+                        })
+                        .then(() => navigation.navigate('Main'))
+                        .catch(err => {
+                            // setError(err.message)
+                            if (err.code === 'auth/invalid-email') {
+                                setError('Enter a valid email address')
+                            } else if (err.code === 'auth/weak-password') {
+                                setError('Invalid password. Password is too weak')
+                            } else {
+                                setError(err.message)
+                                setError('Error creating account.')
+                            }
+                        })
+
+                } else {
+                    setError('Username is already taken')
+                }
             } else {
                 setError('Passwords do not match')
             }
@@ -39,6 +59,13 @@ const Signup = ({ navigation }) => {
                 <Text style={{ color: 'red' }}>
                     {error}
                 </Text> : null}
+            <TextInput
+                placeholder="Username"
+                autoCapitalize="none"
+                style={styles.textInput}
+                value={username}
+                onChangeText={username => setUsername(username)}
+            />
             <TextInput
                 placeholder="Email"
                 autoCapitalize="none"

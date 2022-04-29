@@ -48,17 +48,14 @@ const Main = ({ navigation }) => {
     }
 
     return (
-        <NavigationContainer>
-            {/* <Text>Welcome {user.email}</Text>
-            <TouchableOpacity onPress={() => handleLogout()}>
-                <Text>Logout</Text>
-            </TouchableOpacity> */}
-            <Tab.Navigator>
-                <Tab.Screen name="Tab1" component={Tab1} />
-                <Tab.Screen name="Tab2" component={Tab2} />
-                <Tab.Screen name="Tab3" component={Tab3} />
-            </Tab.Navigator>
-        </NavigationContainer>
+        <Tab.Navigator
+            initialRouteName="Home"
+            tabBarPosition="bottom"
+        >
+            <Tab.Screen name="Profile" component={Tab1} />
+            <Tab.Screen name="Home" component={Tab2} />
+            <Tab.Screen name="Other" component={Tab3} />
+        </Tab.Navigator>
     );
 }
 

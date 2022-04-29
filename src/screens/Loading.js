@@ -6,9 +6,10 @@ import auth from '@react-native-firebase/auth'
 const Main = ({ navigation }) => {
     useEffect(() => {
         auth().onAuthStateChanged(user => {
+            console.log('Loading ' + user)
             navigation.navigate(user ? 'Main' : 'Login')
         })
-    }, [])
+    })
 
     return (
         <View style={styles.container}>
