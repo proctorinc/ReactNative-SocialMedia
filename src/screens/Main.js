@@ -6,6 +6,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
 import Tab3 from './Tab3'
+import TabBar from '../components/TabBar'
 import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator();
@@ -51,6 +52,7 @@ const Main = ({ navigation }) => {
         <Tab.Navigator
             initialRouteName="Home"
             tabBarPosition="bottom"
+        // tabBar={props => <TabBar {...props} />}
         >
             <Tab.Screen name="Profile" component={Tab1} />
             <Tab.Screen name="Home" component={Tab2} />

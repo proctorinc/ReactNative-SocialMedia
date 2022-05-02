@@ -1,23 +1,37 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Text, View, Image, StyleSheet } from 'react-native'
-import { Rating, AirbnbRating } from '@rneui/themed';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { Rating } from '@rneui/themed';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+// const getTodaysImage = () => {
+//     const today = new Date().toDateString()
+//     const image = firestore().collection('images').doc('TpJi4kKB2dfUO8WvDSmd').get()
+//     // .where('showDate', '==', today)
+//     // .get()
+//     console.log("IMAGE: " + image)
+//     console.log("IMAGE ID: " + image.id)
+//     console.log("IMAGE Date: " + image.showDate)
+// }
 
 const Tab2 = () => {
+    // const [image, setImage] = useState()
+
+    // useEffect(() => {
+    //     getTodaysImage()
+    // }, [])
+
     return (
         <SafeAreaView style={styles.view}>
-            <Text style={styles.title}>The Daily Gerth</Text>
+            <Text style={styles.title}>Today's Daily Gerth</Text>
+            <Text style={styles.text}>{new Date().toDateString()}</Text>
             <Image
                 style={styles.image}
                 source={require('../../assets/20211211_194448.jpg')}
                 // source={require('../../assets/beach.jpg')}
-                resizeMode='contain'
+                resizeMethod='scale'
             />
             <Rating
                 style={styles.rating}
-                type='heart'
-                startingValue={3}
-                onFinishRating={console.log('ok')}
             />
         </SafeAreaView>
     )
@@ -39,7 +53,7 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     text: {
-        fontSize: 30,
+        fontSize: 20,
     },
     image: {
         borderRadius: 10,

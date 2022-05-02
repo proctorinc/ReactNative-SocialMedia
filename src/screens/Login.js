@@ -1,28 +1,11 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
-import auth from '@react-native-firebase/auth'
+import { useAuth } from '../context/AuthContext'
 
 const Login = ({ navigation }) => {
+    const { handleLogin, error } = useAuth()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
-
-    const handleLogin = () => {
-        if (email && password) {
-            auth()
-                .signInWithEmailAndPassword(email, password)
-                .then(() => navigation.navigate('Main'))
-                .catch(err => {
-                    if (err.code === 'auth/invalid-email') {
-                        setError('Enter a valid email address')
-                    } else {
-                        setError('Invalid email or password')
-                    }
-                })
-        } else {
-            setError('Enter email and password')
-        }
-    }
 
     return (
         <View style={styles.container}>
@@ -46,7 +29,7 @@ const Login = ({ navigation }) => {
                 placeholder="Password"
                 onChangeText={password => setPassword(password)}
             />
-            <Button title="Login" onPress={() => handleLogin()} />
+            <Button title="Login" onPress={() => handleLogin({ email, password })} />
             <Button
                 title="Don't have an account? Sign Up"
                 onPress={() => navigation.navigate('Signup')}

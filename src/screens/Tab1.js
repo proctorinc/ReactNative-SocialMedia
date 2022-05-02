@@ -1,41 +1,86 @@
-import React, { useState, useEffect } from 'react'
-import { Text, ScrollView, Button, Image, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
-import auth from '@react-native-firebase/auth'
-import { Avatar } from '@rneui/themed';
-
-const handleLogout = () => {
-    try {
-        auth().signOut()
-        console.log('Signed Out!')
-    } catch (e) {
-        console.log(e)
-    }
-}
+import React, { useContext } from 'react'
+import { View, Text, ScrollView, Image, StyleSheet } from 'react-native'
+import AuthContext from '../context/AuthContext';
+import { Rating } from '@rneui/themed';
 
 const Tab1 = () => {
-    const [user, setUser] = useState();
-
-    auth().onAuthStateChanged(user => {
-        if (user) {
-            setUser(auth().currentUser)
-        } else {
-            // console.log('Loading...')
-        }
-    })
+    const { currentUser, handleLogout } = useContext(AuthContext)
 
     return (
         <ScrollView
             style={styles.view}
-            contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+            contentContainerStyle={styles.scrollContainer}
         >
-            <Avatar
-                size={96}
-                rounded
-                source={require('../../assets/beach.jpg')}
+            <Text style={styles.title}>{currentUser ? currentUser.displayName : null}</Text>
+            <Image
+                style={styles.profileImage}
+                source={require('../../assets/20211211_194448.jpg')}
+                resizeMethod='scale'
             />
-            <Text>Username: {user ? user.displayName : null}</Text>
-            <Text>Email: {user ? user.email : null}</Text>
-            <Button title={'logout'} onPress={() => handleLogout()} />
+            <View style={styles.profileView}>
+                <Text>Streak: 10 days</Text>
+                <Text>Rated cat pics: 27</Text>
+                <Text>Email: {currentUser.email}</Text>
+            </View>
+            <View>
+                <Text>Rated Pictures:</Text>
+                <View style={styles.profileView}>
+                    <Text>{new Date().toLocaleDateString()}</Text>
+                    <Image
+                        style={styles.ratedImage}
+                        source={require('../../assets/20211211_194448.jpg')}
+                        resizeMethod='scale'
+                    />
+                    <Rating
+                        style={styles.rating}
+                    />
+                </View>
+                <View style={styles.profileView}>
+                    <Text>{new Date().toLocaleDateString()}</Text>
+                    <Image
+                        style={styles.ratedImage}
+                        source={require('../../assets/20211211_194448.jpg')}
+                        resizeMethod='scale'
+                    />
+                    <Rating
+                        style={styles.rating}
+                    />
+                </View>
+                <View style={styles.profileView}>
+                    <Text>{new Date().toLocaleDateString()}</Text>
+                    <Image
+                        style={styles.ratedImage}
+                        source={require('../../assets/20211211_194448.jpg')}
+                        resizeMethod='scale'
+                    />
+                    <Rating
+                        style={styles.rating}
+                    />
+                </View>
+                <View style={styles.profileView}>
+                    <Text>{new Date().toLocaleDateString()}</Text>
+                    <Image
+                        style={styles.ratedImage}
+                        source={require('../../assets/20211211_194448.jpg')}
+                        resizeMethod='scale'
+                    />
+                    <Rating
+                        style={styles.rating}
+                    />
+                </View>
+                <View style={styles.profileView}>
+                    <Text>{new Date().toLocaleDateString()}</Text>
+                    <Image
+                        style={styles.ratedImage}
+                        source={require('../../assets/20211211_194448.jpg')}
+                        resizeMethod='scale'
+                    />
+                    <Rating
+                        style={styles.rating}
+                    />
+                </View>
+            </View>
+            {/* <Button title={'logout'} onPress={() => handleLogout()} /> */}
         </ScrollView>
 
     )
@@ -48,16 +93,26 @@ const styles = StyleSheet.create({
         // justifyContent: "center",
         // alignItems: 'center',
         // height: '100%',
-        padding: 10,
+        paddingHorizontal: 10,
         // backgroundColor: 'black',
     },
     text: {
         fontSize: 30,
     },
-    image: {
-        width: '50%',
-        // height: '100%',
-        borderRadius: 100
+    title: {
+        fontSize: 45,
+    },
+    profileImage: {
+        borderRadius: 10,
+        width: '100%',
+        height: undefined,
+        aspectRatio: 1
+    },
+    ratedImage: {
+        borderRadius: 10,
+        width: '100%',
+        height: undefined,
+        aspectRatio: 3 / 4
     },
     button: {
         fontSize: 30,
@@ -67,6 +122,21 @@ const styles = StyleSheet.create({
         backgroundColor: 'blue',
         borderRadius: 15,
         marginTop: 10
+    },
+    scrollContainer: {
+        flexGrow: 1,
+        // justifyContent: 'center'
+    },
+    profileView: {
+        borderRadius: 10,
+        borderColor: 'gray',
+        borderWidth: 1,
+        padding: 10,
+        marginVertical: 10
+    },
+    rating: {
+        padding: 25,
+        transform: [{ scale: 1.5 }]
     }
 });
 
