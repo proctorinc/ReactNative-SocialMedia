@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import auth from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore'
 
 const AuthContext = createContext();
 
@@ -8,9 +9,10 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({ navigation, children }) => {
-    const [currentUser, setCurrentUser] = useState();
-    const [loading, setLoading] = useState(true);
+    const [currentUser, setCurrentUser] = useState()
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
+    const [successMsg, setSuccessMsg] = useState('')
 
     const handleLogout = () => {
         try {
@@ -21,13 +23,16 @@ export const AuthProvider = ({ navigation, children }) => {
         }
     }
 
+    const resetError = () => {
+        setError(null)
+    }
+
     const handleLogin = async ({ email, password }) => {
         if (email && password) {
             auth()
                 .signInWithEmailAndPassword(email, password)
                 .then(() => {
                     reload()
-                    // navigation.navigate('Main')
                 })
                 .catch(err => {
                     if (err.code === 'auth/invalid-email') {
@@ -44,43 +49,49 @@ export const AuthProvider = ({ navigation, children }) => {
     const handleSignup = async ({ username, email, password, confirmPassword }) => {
         if (username && email && password && confirmPassword) {
             if (password === confirmPassword) {
-                // if (await isUnique(username)) {
-                auth()
-                    .createUserWithEmailAndPassword(email, password)
-                    .then(async (result) => {
-                        const userInfo = {
-                            displayName: username
+                firestore()
+                    .collection('users')
+                    .where('username', '==', username)
+                    .get()
+                    .then(snapshot => {
+                        if (snapshot.empty) {
+                            return auth().createUserWithEmailAndPassword(email, password)
+                        } else {
+                            throw new Error('Username is already taken')
                         }
-                        auth().currentUser.updateProfile({
+                    })
+                    .then(createdUser => {
+                        createdUser.user.updateProfile({
                             displayName: username
                         })
+                        firestore()
+                            .collection('users')
+                            .doc(createdUser.user.uid)
+                            .set({
+                                username: username,
+                            })
+                        createdUser.user.reload()
+                        createdUser.user.sendEmailVerification()
                     })
-                    .then(() => navigation.navigate('Main'))
                     .catch(err => {
-                        // setError(err.message)
                         if (err.code === 'auth/invalid-email') {
                             setError('Enter a valid email address')
                         } else if (err.code === 'auth/weak-password') {
                             setError('Invalid password. Password is too weak')
                         } else {
-                            setError(err.message)
                             setError('Error creating account.')
+                            // // Delete user if error occurs
+                            // currentUser.delete().then(() => {
+                            //     console.log('deleted user account')
+                            // })
                         }
                     })
-
-                // } else {
-                //     setError('Username is already taken')
-                // }
             } else {
                 setError('Passwords do not match')
             }
         } else {
             setError('Enter email, password, and confirm password')
         }
-    }
-
-    const sendVerification = () => {
-        return currentUser.sendEmailVerification();
     }
 
     const getUser = () => auth().currentUser;
@@ -111,11 +122,12 @@ export const AuthProvider = ({ navigation, children }) => {
         currentUser,
         loading,
         reload,
-        sendVerification,
         handleLogin,
         handleSignup,
         handleLogout,
         error,
+        resetError,
+        successMsg,
     };
 
     return (

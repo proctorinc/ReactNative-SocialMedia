@@ -8,6 +8,8 @@ import Tab2 from './Tab2'
 import Tab3 from './Tab3'
 import TabBar from '../components/TabBar'
 import { NavigationContainer } from '@react-navigation/native';
+import SplashScreen from './SplashScreen'
+import WeeklyGerth from './WeeklyGeth'
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -37,9 +39,7 @@ const Main = ({ navigation }) => {
 
     if (initializing) {
         return (
-            <View>
-                <Text>Loading</Text>
-            </View>
+            <SplashScreen />
         )
     };
 
@@ -48,14 +48,25 @@ const Main = ({ navigation }) => {
         return null
     }
 
+    const isFriday = () => {
+        console.log(new Date().getDay() === 5)
+        return new Date().getDay() === 5
+    }
+
+    const initialRoute = isFriday
+        ? "Weekly"
+        : "Daily"
+
     return (
         <Tab.Navigator
-            initialRouteName="Home"
+            initialRouteName={initialRoute}
             tabBarPosition="bottom"
         // tabBar={props => <TabBar {...props} />}
         >
             <Tab.Screen name="Profile" component={Tab1} />
-            <Tab.Screen name="Home" component={Tab2} />
+            {isFriday
+                ? <Tab.Screen name="Weekly" component={WeeklyGerth} />
+                : <Tab.Screen name="Daily" component={Tab2} />}
             <Tab.Screen name="Other" component={Tab3} />
         </Tab.Navigator>
     );

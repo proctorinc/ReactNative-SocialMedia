@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import { useAuth } from '../context/AuthContext'
 
 const Login = ({ navigation }) => {
-    const { handleLogin, error } = useAuth()
+    const { handleLogin, error, resetError } = useAuth()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -32,7 +32,10 @@ const Login = ({ navigation }) => {
             <Button title="Login" onPress={() => handleLogin({ email, password })} />
             <Button
                 title="Don't have an account? Sign Up"
-                onPress={() => navigation.navigate('Signup')}
+                onPress={() => {
+                    resetError()
+                    navigation.navigate('Signup')
+                }}
             />
         </View>
     )
@@ -49,7 +52,9 @@ const styles = StyleSheet.create({
         width: '90%',
         borderColor: 'gray',
         borderWidth: 1,
-        marginTop: 8
+        marginTop: 8,
+        borderRadius: 10,
+        paddingLeft: 10
     }
 })
 

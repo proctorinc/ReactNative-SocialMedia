@@ -1,22 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
-import { useAuth, AuthContext } from '../context/AuthContext';
-
-// function decycle(obj, stack = []) {
-//     if (!obj || typeof obj !== 'object')
-//         return obj;
-
-//     if (stack.includes(obj))
-//         return null;
-
-//     let s = stack.concat([obj]);
-
-//     return Array.isArray(obj)
-//         ? obj.map(x => decycle(x, s))
-//         : Object.fromEntries(
-//             Object.entries(obj)
-//                 .map(([k, v]) => [k, decycle(v, s)]));
-// }
+import { useAuth } from '../context/AuthContext';
 
 // const isUnique = async (displayName) => {
 //     const users = firestore().collection("users").get()
@@ -34,7 +18,7 @@ import { useAuth, AuthContext } from '../context/AuthContext';
 // }
 
 const Signup = ({ navigation }) => {
-    const { error, handleSignup } = useContext(AuthContext)
+    const { error, handleSignup, resetError } = useAuth()
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -77,10 +61,13 @@ const Signup = ({ navigation }) => {
                 value={confirmPassword}
                 onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}
             />
-            <Button title="Sign Up" onPress={() => handleSignUp()} />
+            <Button title="Sign Up" onPress={() => handleSignup({ username, email, password, confirmPassword })} />
             <Button
                 title="Already have an account? Login"
-                onPress={() => navigation.navigate('Login')}
+                onPress={() => {
+                    resetError()
+                    navigation.navigate('Login')
+                }}
             />
         </View>
     )
