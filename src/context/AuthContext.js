@@ -51,7 +51,7 @@ export const AuthProvider = ({ navigation, children }) => {
             if (password === confirmPassword) {
                 firestore()
                     .collection('users')
-                    .where('username', '==', username)
+                    .where('username', '==', username.toUpperCase())
                     .get()
                     .then(snapshot => {
                         if (snapshot.empty) {
@@ -68,7 +68,8 @@ export const AuthProvider = ({ navigation, children }) => {
                             .collection('users')
                             .doc(createdUser.user.uid)
                             .set({
-                                username: username,
+                                email: email,
+                                username: username.toUpperCase(),
                             })
                         createdUser.user.reload()
                         createdUser.user.sendEmailVerification()
@@ -78,8 +79,10 @@ export const AuthProvider = ({ navigation, children }) => {
                             setError('Enter a valid email address')
                         } else if (err.code === 'auth/weak-password') {
                             setError('Invalid password. Password is too weak')
+                        } else if (err.message === 'Username is already taken') {
+                            setError(err.message)
                         } else {
-                            setError('Error creating account.')
+                            setError('Unable to create account')
                             // // Delete user if error occurs
                             // currentUser.delete().then(() => {
                             //     console.log('deleted user account')
@@ -92,6 +95,11 @@ export const AuthProvider = ({ navigation, children }) => {
         } else {
             setError('Enter email, password, and confirm password')
         }
+    }
+
+    const deleteAccount = () => {
+        // Delete from Auth
+        // Delete Firestore data => document(user.id)
     }
 
     const getUser = () => auth().currentUser;

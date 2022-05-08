@@ -1,7 +1,7 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Signup from '../screens/Signup'
-import Login from '../screens/Login'
+import Login from '../screens/auth/Login'
 import Main from '../screens/Main'
 import PendingEnable from '../screens/PendingEnable'
 

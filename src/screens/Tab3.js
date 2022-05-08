@@ -6,7 +6,7 @@ import { utils } from '@react-native-firebase/app';
 import storage, { FirebaseStorageTypes } from '@react-native-firebase/storage'
 import firestore from '@react-native-firebase/firestore'
 
-const Tab1 = () => {
+const Tab3 = () => {
     const { currentUser, handleLogout } = useContext(AuthContext)
     const [imageTab, setImageTab] = useState([]);
 
@@ -15,12 +15,12 @@ const Tab1 = () => {
             .ref('new-images/')
             .listAll()
             .then(function (result) {
-                console.log(result.items.length)
+                // console.log(result.items.length)
                 result.items.forEach(function (imageRef) {
-                    console.log(imageRef)
+                    // console.log(imageRef)
                     imageRef.getDownloadURL()
                         .then(function (url) {
-                            console.log(url)
+                            // console.log(url)
                             firestore()
                             // imageTab.push(url);
                             // setImageTab(imageTab);
@@ -134,4 +134,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Tab1
+export default Tab3
