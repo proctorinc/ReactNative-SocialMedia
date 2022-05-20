@@ -8,23 +8,15 @@ const Tab2 = () => {
     const [image, setImage] = useState()
 
     const getTodaysImage = () => {
-        const start = new Date().setHours(0, 0, 0, 0) / 100
-        const end = new Date().setHours(23, 59, 59, 59) / 100
-        console.log('start: ' + start)
-        console.log('end: ' + end)
         firestore().collection('images')
-            // .where('date', '>=', start)
-            // .where('date', '<=', end)
+            .where('date', '==', new Date().toLocaleDateString())
             .limit(1)
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(snapshot => {
-                    // console.log('data: ' + snapshot.data().url)
-                    console.log('data: ' + snapshot.data().date)
+                    console.log('Image Date: ' + snapshot.data().date)
                     setImage(snapshot.data())
                 })
-                // console.log('snapshot: ' + snapshot)
-                // setImage(snapshot)
             }).catch((err) => {
                 console.log(err)
             })
@@ -32,8 +24,7 @@ const Tab2 = () => {
 
     useEffect(() => {
         getTodaysImage()
-        // console.log("IMAGE ID: " + image.id)
-        // console.log("IMAGE Date: " + image.showDate)
+        // console.log(new Date().toLocaleDateString())
     }, [])
 
     return (
@@ -41,12 +32,10 @@ const Tab2 = () => {
             <Text style={styles.title}>Today's Daily Gerth</Text>
             <Text style={styles.text}>{new Date().toDateString()}</Text>
             {!image
-                ? <Text>Loading</Text>
+                ? <Text>No Image Available</Text>
                 : <Image
                     style={styles.image}
                     source={{ uri: image.url }}
-                    // source={require('../../assets/20211211_194448.jpg')}
-                    // source={require('../../assets/beach.jpg')}
                     resizeMethod='scale'
                 />}
 

@@ -32,6 +32,7 @@ buildscript {
         classpath("com.google.gms:google-services:4.3.10")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath('com.github.uccmawei:FingerprintIdentify:1.2.6')
     }
 }
 
@@ -53,6 +54,6 @@ allprojects {
             }
         }
         google()
-        maven { url 'https://www.jitpack.io' }
+        maven { url 'https://jitpack.io' }
     }
 }

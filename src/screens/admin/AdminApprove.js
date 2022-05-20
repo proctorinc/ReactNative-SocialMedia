@@ -2,13 +2,13 @@ import { View, Button, Text, StyleSheet, ActivityIndicator, Image } from 'react-
 import React, { useEffect, useState } from 'react'
 import storage from '@react-native-firebase/storage'
 import firestore from '@react-native-firebase/firestore'
-import ImagePicker from 'react-native-image-picker'
+import * as ImagePicker from 'react-native-image-picker'
 
 const AdminApprove = () => {
     const [photoURLs, setPhotoURLs] = useState([])
     const [loading, setLoading] = useState(true)
     const [photoDimensions, setPhotoDimensions] = useState({ width: 0, height: 0 })
-    const [image, setImage] = useState(null);
+    // const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [transferred, setTransferred] = useState(0);
 
@@ -21,7 +21,8 @@ const AdminApprove = () => {
                 path: 'images'
             }
         };
-        ImagePicker.launchImageLibrary(options, response => {
+        ImagePicker.launchImageLibrary(response => {
+            console.log(response)
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             } else if (response.error) {
@@ -29,15 +30,28 @@ const AdminApprove = () => {
             } else if (response.customButton) {
                 console.log('User tapped custom button: ', response.customButton);
             } else {
+                // const source = { uri: response.uri };
+                // console.log(source);
+                // setImage(source)
+                // console.log('OK? ')
+                // console.log(response.assets.uri)
+                // uploadImage(response.assets)
                 const source = { uri: response.uri };
-                console.log(source);
-                setImage(source)
+                console.log('response', JSON.stringify(res));
+                // filePath: response,
+                console.log(response.data)
+                console.log(response.uri)
+                uploadImage(source)
             }
         });
     };
 
-    const uploadImage = async () => {
-        const { uri } = image;
+    const uploadImage = async (response) => {
+        // const { uri } = response;
+        // const uri = response.map(item => item.uri)
+        const uri = response['uri']
+        console.log(response)
+        console.log(uri)
         const filename = uri.substring(uri.lastIndexOf('/') + 1);
         const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
         setUploading(true);
@@ -68,7 +82,7 @@ const AdminApprove = () => {
         setLoading(true)
         // Get photos from firebase storage
         await storage()
-            .ref('new-images/')
+            .ref('images/')
             .listAll()
             .then(async (imageRefs) => {
                 setPhotoURLs(await Promise.all(imageRefs.items.map((ref) => ref.getDownloadURL())))
@@ -112,7 +126,6 @@ const AdminApprove = () => {
             .doc()
             .set({
                 date: null,
-                status: 'verified',
                 url: imageUrl
             })
 

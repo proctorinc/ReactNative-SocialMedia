@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import io.invertase.firebase.storage.ReactNativeFirebaseStoragePackage;
 import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
+import com.hieuvp.fingerprint.ReactNativeFingerprintScannerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new MyReactNativePackage());
       // packages.add(new ReactNativeFirebaseStoragePackage());
       // packages.add(new ReactNativeFirebaseAuthPackage());
+      packages.add(new ReactNativeFingerprintScannerPackage());
       return packages;
     }
 

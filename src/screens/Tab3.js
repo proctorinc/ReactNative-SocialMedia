@@ -12,7 +12,7 @@ const Tab3 = () => {
 
     useEffect(() => {
         storage()
-            .ref('new-images/')
+            .ref('images/')
             .listAll()
             .then(function (result) {
                 // console.log(result.items.length)

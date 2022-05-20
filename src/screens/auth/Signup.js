@@ -1,56 +1,64 @@
-import React, { useEffect, useState } from 'react'
+import { BackgroundImage } from '@rneui/base';
+import React, { useState, useContext } from 'react'
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native'
-import { useAuth } from '../../context/AuthContext'
-import SplashScreen from '../SplashScreen'
+import { useAuth } from '../../context/AuthContext';
 
-const Login = ({ navigation }) => {
-    const { handleLogin, error, resetError, loading, checkKeychain } = useAuth()
+const Signup = ({ navigation }) => {
+    const { error, handleSignup, resetError } = useAuth()
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
-    useEffect(() => {
-        checkKeychain()
-    }, [])
-
-    if (loading) {
-        return <SplashScreen />
-    }
+    const [confirmPassword, setConfirmPassword] = useState('')
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Login</Text>
-            {error ?
-                <Text style={styles.errorText}>
-                    {error}
-                </Text> : null}
+            <Text style={styles.title}>Sign Up</Text>
+            {error
+                ? <Text style={styles.errorText}>{error}</Text>
+                : null}
             <TextInput
+                placeholder="Username"
+                autoCapitalize="none"
+                style={styles.textInput}
+                value={username}
+                onChangeText={username => setUsername(username)}
+            />
+            <TextInput
+                placeholder="Email"
+                autoCapitalize="none"
                 style={styles.textInput}
                 value={email}
-                autoCapitalize="none"
-                placeholder="Email"
                 onChangeText={email => setEmail(email)}
             />
             <TextInput
                 secureTextEntry
+                placeholder="Password"
+                autoCapitalize="none"
                 style={styles.textInput}
                 value={password}
-                autoCapitalize="none"
-                placeholder="Password"
                 onChangeText={password => setPassword(password)}
+            />
+            <TextInput
+                secureTextEntry
+                placeholder="Confirm Password"
+                autoCapitalize="none"
+                style={styles.textInput}
+                value={confirmPassword}
+                onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}
             />
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleLogin(email, password)}
+                onPress={() => handleSignup(username, email, password, confirmPassword )}
             >
-                <Text style={styles.buttonText}>Login</Text>
+                <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
                     resetError()
-                    navigation.navigate('Signup')
+                    navigation.navigate('Login')
                 }}
             >
-                <Text>Don't have an account? Sign Up</Text>
+                <Text>Already have an account? Login</Text>
             </TouchableOpacity>
         </View>
     )
@@ -71,18 +79,18 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         paddingLeft: 10,
         backgroundColor: 'lightgray',
-        borderColor: 'white',
+        borderColor: 'white'
     },
     title: {
         fontSize: 50,
         paddingBottom: 20,
-        // marginTop: -20,
+        marginTop: -20,
     },
     button: {
         paddingVertical: 10,
         paddingHorizontal: 40,
-        border: 1,
-        borderColor: 'gray',
+        borderWidth: 2,
+        borderColor: 'white',
         backgroundColor: 'lightblue',
         borderRadius: 10,
         marginVertical: 20,
@@ -107,4 +115,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Login
+export default Signup

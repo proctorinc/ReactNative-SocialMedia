@@ -131,6 +131,9 @@ def reactNativeArchitectures() {
 }
 
 android {
+    // compileSdkVersion 29
+    // buildToolsVersion "29.0.2"
+    
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -138,6 +141,7 @@ android {
     defaultConfig {
         applicationId "com.thedailygerth"
         minSdkVersion rootProject.ext.minSdkVersion
+        // targetSdkVersion 29
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -270,6 +274,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage'
 
     implementation 'com.google.firebase:firebase-analytics'
+
+    implementation 'com.github.uccmawei:FingerprintIdentify:1.2.6'
+
+    implementation project(':react-native-fingerprint-scanner')
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
