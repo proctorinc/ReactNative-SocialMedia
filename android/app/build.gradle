@@ -275,10 +275,6 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-analytics'
 
-    implementation 'com.github.uccmawei:FingerprintIdentify:1.2.6'
-
-    implementation project(':react-native-fingerprint-scanner')
-
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

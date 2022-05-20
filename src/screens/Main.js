@@ -23,11 +23,9 @@ const Main = () => {
         return new Date().getDay() === 5
     }
 
-    const initialRoute = 'Calendar'
-    //  = isFriday
-    //     ? "Weekly"
-    //     : "Daily"
+    const initialRoute = isFriday ? "Weekly" : "Daily"
 
+    // = 'Calendar'
     // = 'Admin'
 
     if (loading) {
@@ -36,16 +34,18 @@ const Main = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName={initialRoute}
+            initialRouteName={'Daily'}
             tabBarPosition="bottom"
         // tabBar={props => <TabBar {...props} />}
         >
             <Tab.Screen name="Profile" component={Tab1} />
-            {isFriday
-                ? <Tab.Screen name="Weekly" component={WeeklyGerth} />
-                : <Tab.Screen name="Daily" component={Tab2} />}
+            {/* {isFriday
+                ? <Tab.Screen name="Home" component={WeeklyGerth} />
+                : <Tab.Screen name="Home" component={Tab2} />} */}
+            <Tab.Screen name="Weekly" component={WeeklyGerth} />
+            <Tab.Screen name="Daily" component={Tab2} />
             {/* <Tab.Screen name="Other" component={Tab3} /> */}
-            <Tab.Screen name="Admin" component={AdminApprove} />
+            {/* <Tab.Screen name="Admin" component={AdminApprove} /> */}
             <Tab.Screen name="Calendar" component={AdminCalendar} />
         </Tab.Navigator>
     );

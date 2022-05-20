@@ -12,9 +12,6 @@ import com.facebook.soloader.SoLoader;
 import com.thedailygerth.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import io.invertase.firebase.storage.ReactNativeFirebaseStoragePackage;
-import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
-import com.hieuvp.fingerprint.ReactNativeFingerprintScannerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -31,9 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
       // Packages that cannot be autolinked yet can be added manually here, for
       // example:
       // packages.add(new MyReactNativePackage());
-      // packages.add(new ReactNativeFirebaseStoragePackage());
-      // packages.add(new ReactNativeFirebaseAuthPackage());
-      packages.add(new ReactNativeFingerprintScannerPackage());
+      // packages.add(new SvgPackage());
       return packages;
     }
 

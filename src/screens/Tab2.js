@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, Image, StyleSheet } from 'react-native'
-import { Rating } from '@rneui/themed';
+import { Text, Image, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore'
+import { Heart } from 'phosphor-react-native';
 
 const Tab2 = () => {
     const [image, setImage] = useState()
@@ -38,31 +38,25 @@ const Tab2 = () => {
                     source={{ uri: image.url }}
                     resizeMethod='scale'
                 />}
-
-            {/* <Rating
-                style={styles.rating}
-            /> */}
+            <Heart color='#FD8D8D' weight='duotone' />
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     view: {
-        // textAlign: 'center',
-        // justifyContent: "center",
-        // alignItems: 'center',
         height: '100%',
-        padding: 10,
         alignItems: 'center',
-        // backgroundColor: 'black',
+        backgroundColor: '#F4F4F4',
     },
     title: {
         textAlign: 'center',
         fontSize: 30,
-        padding: 5,
+        fontFamily: 'Poppins-Light',
     },
     text: {
-        fontSize: 20,
+        fontSize: 18,
+        paddingBottom: 15,
     },
     image: {
         borderRadius: 10,

@@ -19,13 +19,13 @@ const Tab1 = () => {
                     title={currentUser.displayName.substring(0, 2).toUpperCase()}
                     rounded
                     overlayContainerStyle={{ backgroundColor: 'gray' }}
-                // source={require('../../assets/beach.jpg')}
+                // source={require('../../assets/images/beach.jpg')}
                 />
                 <Text style={styles.title}>{currentUser ? currentUser.displayName : null}</Text>
             </View>
             <Image
                 style={styles.profileImage}
-                source={require('../../assets/20211211_194448.jpg')}
+                source={require('../../assets/images/20211211_194448.jpg')}
                 resizeMethod='scale'
             />
             <View style={styles.profileView}>
@@ -39,7 +39,7 @@ const Tab1 = () => {
                     <Text>{new Date().toLocaleDateString()}</Text>
                     <Image
                         style={styles.ratedImage}
-                        source={require('../../assets/20211211_194448.jpg')}
+                        source={require('../../assets/images/20211211_194448.jpg')}
                         resizeMethod='scale'
                     />
                     <Rating
@@ -50,7 +50,7 @@ const Tab1 = () => {
                     <Text>{new Date().toLocaleDateString()}</Text>
                     <Image
                         style={styles.ratedImage}
-                        source={require('../../assets/20211211_194448.jpg')}
+                        source={require('../../assets/images/20211211_194448.jpg')}
                         resizeMethod='scale'
                     />
                     <Rating
@@ -61,7 +61,7 @@ const Tab1 = () => {
                     <Text>{new Date().toLocaleDateString()}</Text>
                     <Image
                         style={styles.ratedImage}
-                        source={require('../../assets/20211211_194448.jpg')}
+                        source={require('../../assets/images/20211211_194448.jpg')}
                         resizeMethod='scale'
                     />
                     <Rating
@@ -72,7 +72,7 @@ const Tab1 = () => {
                     <Text>{new Date().toLocaleDateString()}</Text>
                     <Image
                         style={styles.ratedImage}
-                        source={require('../../assets/20211211_194448.jpg')}
+                        source={require('../../assets/images/20211211_194448.jpg')}
                         resizeMethod='scale'
                     />
                     <Rating
@@ -83,7 +83,7 @@ const Tab1 = () => {
                     <Text>{new Date().toLocaleDateString()}</Text>
                     <Image
                         style={styles.ratedImage}
-                        source={require('../../assets/20211211_194448.jpg')}
+                        source={require('../../assets/images/20211211_194448.jpg')}
                         resizeMethod='scale'
                     />
                     <Rating

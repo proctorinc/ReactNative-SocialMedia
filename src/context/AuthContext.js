@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
 import * as Keychain from 'react-native-keychain'
-import FingerprintScanner from 'react-native-fingerprint-scanner';
 
 const AuthContext = createContext();
 
@@ -23,40 +22,17 @@ export const AuthProvider = ({ children }) => {
             reload()
         } catch (e) {
             console.log(e)
-        }-legacy
+        } -legacy
     }
 
     const resetError = () => {
         setError(null)
     }
 
-    const getMessage = (biometricType) => {
-        if (biometricType == 'Face ID') {
-            return 'Scan your face using Face ID to continue'
-        } else {
-            console.log(biometricType)
-            return 'Scan your fingerprint to continue'
-        }
-    }
-
     const checkKeychain = async () => {
         try {
             const credentials = await Keychain.getGenericPassword()
             if (credentials) {
-                console.log('Email: ' + credentials.username)
-                console.log('Password: ' + credentials.password)
-                FingerprintScanner.isSensorAvailable()
-                    .then(biometricType => {
-                        console.log('bio type: ' + biometricType)
-                        FingerprintScanner.authenticate({description: getMessage(biometricType)})
-                            .then(() => {
-                                handleLogin(credentials.username, credentials.password)
-                            }).catch(err => {
-                                console.log('Authentication Error: ' + err)
-                            })
-                    }).catch(err => {
-                        console.log('isSensorAvailable error: ' + err)
-                    })
                 handleLogin(credentials.username, credentials.password)
             } else {
                 console.log('No credentials!')

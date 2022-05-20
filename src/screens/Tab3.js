@@ -58,22 +58,22 @@ const Tab3 = () => {
     //         >
     //             <Image
     //                 style={styles.ratedImage}
-    //                 source={require('../../assets/20211211_194448.jpg')}
+    //                 source={require('../../assets/images/20211211_194448.jpg')}
     //                 resizeMethod='scale'
     //             />
     //             <Image
     //                 style={styles.ratedImage}
-    //                 source={require('../../assets/20211211_194448.jpg')}
+    //                 source={require('../../assets/images/20211211_194448.jpg')}
     //                 resizeMethod='scale'
     //             />
     //             <Image
     //                 style={styles.ratedImage}
-    //                 source={require('../../assets/20211211_194448.jpg')}
+    //                 source={require('../../assets/images/20211211_194448.jpg')}
     //                 resizeMethod='scale'
     //             />
     //             <Image
     //                 style={styles.ratedImage}
-    //                 source={require('../../assets/20211211_194448.jpg')}
+    //                 source={require('../../assets/images/20211211_194448.jpg')}
     //                 resizeMethod='scale'
     //             />
     //         </ScrollView>
