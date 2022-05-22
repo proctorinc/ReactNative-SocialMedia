@@ -1,56 +1,107 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, Image, StyleSheet } from 'react-native'
+import { Text, Image, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import firestore from '@react-native-firebase/firestore'
+import ScaledImage from '../components/ScaledImage';
+import { Trophy, Heart, User } from 'phosphor-react-native'
 
-const WeeklyGerth = () => {
+const Tab2 = () => {
+    const [winnerStats, setWinnerStats] = useState({
+        uri: '',
+        placement: 1,
+        averageRating: 4.8,
+    })
+
+    const getTodaysImage = () => {
+        firestore().collection('images')
+            .where('date', '==', new Date().toLocaleDateString())
+            .limit(1)
+            .get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(snapshot => {
+                    console.log('Image Date: ' + snapshot.data().date)
+                    setWinnerStats({ ...winnerStats, uri: snapshot.data().url })
+                })
+            }).catch((err) => {
+                console.log(err)
+            })
+    }
+
+    useEffect(() => {
+        getTodaysImage()
+    }, [])
 
     return (
         <SafeAreaView style={styles.view}>
-            <Text style={styles.title}>Weekly Gerth Results</Text>
-            <Text style={styles.text}>{new Date().toDateString()}</Text>
-            <Image
-                style={styles.image}
-                source={require('../../assets/images/20211211_194448.jpg')}
-                resizeMethod='scale'
-            />
-            <Image
-                style={styles.image}
-                source={require('../../assets/images/20211211_194448.jpg')}
-                resizeMethod='scale'
-            />
-            <Image
-                style={styles.image}
-                source={require('../../assets/images/20211211_194448.jpg')}
-                resizeMethod='scale'
-            />
+            <Text style={styles.title}>Weekly Gerth's</Text>
+            <Text style={styles.text}>May 10th-16th</Text>
+            {!winnerStats.uri
+                ? <Image source={{ uri: '../../assets/images/adaptive-icon.png' }} style={styles.image} />
+                : <ScaledImage uri={winnerStats.uri} style={styles.image} />}
+            <View style={styles.statview}>
+                <View style={styles.stat}>
+                    <Trophy size={64} color={'#FFD84E'} weight={'fill'} />
+                    <Text style={styles.stattext}>#{winnerStats.placement}</Text>
+                </View>
+                <View style={styles.stat}>
+                    <Heart size={64} color={'#FD8D8D'} weight={'fill'} />
+                    <Text style={styles.stattext}>{winnerStats.averageRating}</Text>
+                </View>
+            </View>
+            <View>
+                {/* <Text>See who voted!</Text> */}
+                <View style={styles.userRating}>
+                    <User size={32} />
+                    <Text style={styles.text}>Mattyp</Text>
+                    <View style={styles.stat}>
+                        <Heart size={50} color={'#FD8D8D'} weight={'fill'} />
+                        <Text style={styles.userRatingText}>5</Text>
+                    </View>
+                </View>
+
+                <View style={styles.userRating}>
+                    <User size={32} />
+                    <Text style={styles.text}>WifeyP</Text>
+                    <View style={styles.stat}>
+                        <Heart size={50} color={'#FD8D8D'} weight={'fill'} />
+                        <Text style={styles.userRatingText}>4</Text>
+                    </View>
+                </View>
+
+                <View style={styles.userRating}>
+                    <User size={32} />
+                    <Text style={styles.text}>Moo</Text>
+                    <View style={styles.stat}>
+                        <Heart size={50} color={'#FD8D8D'} weight={'fill'} />
+                        <Text style={styles.userRatingText}>3</Text>
+                    </View>
+                </View>
+            </View>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     view: {
-        // textAlign: 'center',
-        // justifyContent: "center",
-        // alignItems: 'center',
         height: '100%',
-        padding: 10,
         alignItems: 'center',
-        // backgroundColor: 'black',
+        backgroundColor: '#F4F4F4',
+        justifyContent: 'center',
     },
     title: {
         textAlign: 'center',
         fontSize: 30,
-        padding: 5,
+        fontFamily: 'Poppins-Light',
     },
     text: {
-        fontSize: 20,
+        fontSize: 18,
+        // paddingBottom: 15,
+        padding: 10
     },
     image: {
         borderRadius: 10,
-        width: '33%',
+        width: '100%',
         height: undefined,
-        // aspectRatio: 1,
-        aspectRatio: 3 / 4
     },
     button: {
         fontSize: 30,
@@ -62,9 +113,32 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     rating: {
-        padding: 25,
-        transform: [{ scale: 1.5 }]
+        backgroundColor: 'red'
+    },
+    statview: {
+        flexDirection: 'row'
+    },
+    stat: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 5,
+    },
+    stattext: {
+        position: 'absolute',
+        fontSize: 24,
+        fontFamily: 'Poppins-Medium',
+    },
+    userRating: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // padding: 5,
+    },
+    userRatingText: {
+        position: 'absolute',
+        fontSize: 18,
+        fontFamily: 'Poppins-Medium',
     }
 });
 
-export default WeeklyGerth
+export default Tab2

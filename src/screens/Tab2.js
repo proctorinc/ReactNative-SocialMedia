@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Text, Image, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore'
-import { Heart } from 'phosphor-react-native';
+import HeartRating from '../components/HeartRating';
+import ScaledImage from '../components/ScaledImage';
 
 const Tab2 = () => {
     const [image, setImage] = useState()
@@ -24,7 +25,6 @@ const Tab2 = () => {
 
     useEffect(() => {
         getTodaysImage()
-        // console.log(new Date().toLocaleDateString())
     }, [])
 
     return (
@@ -32,13 +32,9 @@ const Tab2 = () => {
             <Text style={styles.title}>Today's Daily Gerth</Text>
             <Text style={styles.text}>{new Date().toDateString()}</Text>
             {!image
-                ? <Text>No Image Available</Text>
-                : <Image
-                    style={styles.image}
-                    source={{ uri: image.url }}
-                    resizeMethod='scale'
-                />}
-            <Heart color='#FD8D8D' weight='duotone' />
+                ? <Image source={{ uri: '../../assets/images/adaptive-icon.png' }} style={styles.image} />
+                : <ScaledImage uri={image.url} style={styles.image} />}
+            <HeartRating style={styles.rating} />
         </SafeAreaView>
     )
 }
@@ -48,6 +44,8 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
         backgroundColor: '#F4F4F4',
+        justifyContent: 'center',
+        // backgroundColor: 'red',
     },
     title: {
         textAlign: 'center',
@@ -62,8 +60,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '100%',
         height: undefined,
-        // aspectRatio: 1,
-        aspectRatio: 3 / 4
     },
     button: {
         fontSize: 30,
@@ -75,8 +71,11 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     rating: {
-        padding: 25,
-        transform: [{ scale: 1.5 }]
+        // position: 'absolute',
+        // bottom: 0,
+        // alignSelf: 'flex-end'
+        // flex: 1,
+        backgroundColor: 'red'
     }
 });
 
