@@ -1,21 +1,32 @@
 import React, { useState, useEffect } from 'react'
-import { Text, Image, StyleSheet } from 'react-native'
+import { Text, View, Image, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore'
 import HeartRating from '../components/HeartRating';
 import ScaledImage from '../components/ScaledImage';
+import { useAuth } from '../context/AuthContext';
+import UserRatings from '../components/UserRatings';
 
 const Tab2 = () => {
-    const [image, setImage] = useState()
+    const { currentUser } = useAuth()
+    const [image, setImage] = useState(null)
+    const [rating, setRating] = useState(0)
 
     const getTodaysImage = () => {
-        firestore().collection('images')
+        firestore()
+            .collection('images')
             .where('date', '==', new Date().toLocaleDateString())
             .limit(1)
+            // .onSnapshot(documentSnapshot => {
+            //     if (documentSnapshot) {
+            //         console.log(documentSnapshot)
+            //         setImage(documentSnapshot.data())
+            //     }
+            // })
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(snapshot => {
-                    console.log('Image Date: ' + snapshot.data().date)
+                    // console.log('Image Date: ' + snapshot.data().date)
                     setImage(snapshot.data())
                 })
             }).catch((err) => {
@@ -23,8 +34,25 @@ const Tab2 = () => {
             })
     }
 
+    const getRating = () => {
+        const today = new Date().toLocaleDateString().replace(/\//g, '')
+        console.log(today)
+        firestore()
+            .collection('ratings')
+            .doc(currentUser.uid + '_' + today)
+            .onSnapshot(documentSnapshot => {
+                if (documentSnapshot.exists) {
+                    setRating(documentSnapshot.data().rating)
+                } else {
+                    // console.log('NOPE')
+                }
+            })
+    }
+
     useEffect(() => {
-        getTodaysImage()
+        const subscriber = getTodaysImage()
+        getRating()
+        return () => subscriber();
     }, [])
 
     return (
@@ -34,7 +62,12 @@ const Tab2 = () => {
             {!image
                 ? <Image source={{ uri: '../../assets/images/adaptive-icon.png' }} style={styles.image} />
                 : <ScaledImage uri={image.url} style={styles.image} />}
-            <HeartRating style={styles.rating} />
+            {!rating
+            ? <HeartRating style={styles.rating} />
+            : <View style={{ height: '30%' }}>
+                <Text>Next Rating in: 10 hours 34 minutes</Text>
+                <UserRatings />
+            </View>}
         </SafeAreaView>
     )
 }

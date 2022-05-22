@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore'
 import ScaledImage from '../components/ScaledImage';
 import { Trophy, Heart, User } from 'phosphor-react-native'
+import UserRatings from '../components/UserRatings';
 
 const Tab2 = () => {
     const [winnerStats, setWinnerStats] = useState({
@@ -48,35 +49,7 @@ const Tab2 = () => {
                     <Text style={styles.stattext}>{winnerStats.averageRating}</Text>
                 </View>
             </View>
-            <View>
-                {/* <Text>See who voted!</Text> */}
-                <View style={styles.userRating}>
-                    <User size={32} />
-                    <Text style={styles.text}>Mattyp</Text>
-                    <View style={styles.stat}>
-                        <Heart size={50} color={'#FD8D8D'} weight={'fill'} />
-                        <Text style={styles.userRatingText}>5</Text>
-                    </View>
-                </View>
-
-                <View style={styles.userRating}>
-                    <User size={32} />
-                    <Text style={styles.text}>WifeyP</Text>
-                    <View style={styles.stat}>
-                        <Heart size={50} color={'#FD8D8D'} weight={'fill'} />
-                        <Text style={styles.userRatingText}>4</Text>
-                    </View>
-                </View>
-
-                <View style={styles.userRating}>
-                    <User size={32} />
-                    <Text style={styles.text}>Moo</Text>
-                    <View style={styles.stat}>
-                        <Heart size={50} color={'#FD8D8D'} weight={'fill'} />
-                        <Text style={styles.userRatingText}>3</Text>
-                    </View>
-                </View>
-            </View>
+            <UserRatings />
         </SafeAreaView>
     )
 }
