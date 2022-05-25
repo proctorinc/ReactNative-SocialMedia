@@ -1,29 +1,14 @@
 import { View, Text, StyleSheet, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import firestore from '@react-native-firebase/firestore'
 import { useNavigation } from '@react-navigation/native'
 import { DAYS_OF_WEEK } from '../../consts'
+import { checkIfDateHasImage } from '../../api/api'
 
 const ImageDateEntry = ({ date, selectedDate, toggleShowModal, setAssignDate }) => {
     const [hasImage, setHasImage] = useState(false)
     const [isSelected, setIsSelected] = useState(false)
     const [cancelled, setCancelled] = useState(false)
     const navigation = useNavigation()
-
-    const checkIfDateHasImage = () => {
-        firestore().collection('images')
-            .where('date', '==', date.toLocaleDateString())
-            .get()
-            .then(querySnapshot => {
-                if (querySnapshot.empty && !cancelled) {
-                    setHasImage(false)
-                } else if (!cancelled) {
-                    setHasImage(true)
-                } else {
-                    console.log('Skipped!')
-                }
-            })
-    }
 
     const selectedStyle = () => {
         if (isSelected) {
@@ -37,9 +22,16 @@ const ImageDateEntry = ({ date, selectedDate, toggleShowModal, setAssignDate }) 
         }
     }
 
+    const fetchIfDateHasImage = async () => {
+        await checkIfDateHasImage(date)
+            .then((dateHasImage) => {
+                setHasImage(dateHasImage)
+            })
+    }
+
     useEffect(() => {
         if (!hasImage) {
-            checkIfDateHasImage()
+            fetchIfDateHasImage()
         }
         setIsSelected(date.toLocaleDateString() === selectedDate.toLocaleDateString())
 

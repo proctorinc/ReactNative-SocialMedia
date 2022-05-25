@@ -33,7 +33,8 @@ export const AuthProvider = ({ children }) => {
         try {
             const credentials = await Keychain.getGenericPassword()
             if (credentials) {
-                handleLogin(credentials.username, credentials.password)
+                console.log('Credentials Found!')
+                // handleLogin(credentials.username, credentials.password)
             } else {
                 console.log('No credentials!')
                 setLoading(false)
@@ -70,12 +71,16 @@ export const AuthProvider = ({ children }) => {
             if (password === confirmPassword) {
                 firestore()
                     .collection('users')
-                    .where('username', '==', username.toUpperCase())
+                    .where("username", "<=", username.toUpperCase())
+                    .where("username", ">=", username.toLowerCase() + "\uf8ff")
                     .get()
                     .then(snapshot => {
                         if (snapshot.empty) {
                             return auth().createUserWithEmailAndPassword(email, password)
                         } else {
+                            snapshot.forEach(item => {
+                                console.log(item.data())
+                            })
                             throw new Error('Username is already taken')
                         }
                     })
@@ -88,7 +93,7 @@ export const AuthProvider = ({ children }) => {
                             .doc(createdUser.user.uid)
                             .set({
                                 email: email,
-                                username: username.toUpperCase(),
+                                username: username,
                             })
                         createdUser.user.reload()
                         createdUser.user.sendEmailVerification()
@@ -101,11 +106,8 @@ export const AuthProvider = ({ children }) => {
                         } else if (err.message === 'Username is already taken') {
                             setError(err.message)
                         } else {
+                            // setError(err.message)
                             setError('Unable to create account')
-                            // // Delete user if error occurs
-                            // currentUser.delete().then(() => {
-                            //     console.log('deleted user account')
-                            // })
                         }
                     })
             } else {

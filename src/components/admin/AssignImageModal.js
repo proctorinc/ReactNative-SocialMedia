@@ -13,7 +13,8 @@ const AssignImageModal = ({ date, toggleShowModal }) => {
     const getPhotos = async () => {
         setLoading(true)
         // Get photos from firebase storage
-        firestore().collection('images')
+        firestore()
+            .collection('images')
             .where('date', '==', null)
             .get()
             .then(querySnapshot => {
@@ -21,6 +22,8 @@ const AssignImageModal = ({ date, toggleShowModal }) => {
                     // console.log(snapshot.data().url)
                     setPhotoURLs(old => [...old, snapshot.data().url])
                 })
+                // Shouldn't this be:
+                // setPhotoURLs(querySnapshot.data())
             }).catch((err) => {
                 console.log(err)
             })

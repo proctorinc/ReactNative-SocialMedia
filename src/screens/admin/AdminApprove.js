@@ -56,15 +56,17 @@ const AdminApprove = () => {
         const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
         setUploading(true);
         setTransferred(0);
-        const task = storage()
-            .ref(filename)
-            .putFile(uploadUri);
-        // set progress state
-        task.on('state_changed', snapshot => {
-            setTransferred(
-                Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000
-            );
-        });
+        const task = () => {
+            storage()
+                .ref(filename)
+                .putFile(uploadUri);
+            // set progress state
+            task.on('state_changed', snapshot => {
+                setTransferred(
+                    Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000
+                );
+            });
+        }
         try {
             await task;
         } catch (e) {
@@ -82,7 +84,7 @@ const AdminApprove = () => {
         setLoading(true)
         // Get photos from firebase storage
         await storage()
-            .ref('images/')
+            .ref('new-images/')
             .listAll()
             .then(async (imageRefs) => {
                 setPhotoURLs(await Promise.all(imageRefs.items.map((ref) => ref.getDownloadURL())))
@@ -111,14 +113,6 @@ const AdminApprove = () => {
         const imageUrl = photoURLs[0]
         setLoading(true)
         const ref = storage().refFromURL(imageUrl)
-
-        // TODO: move location of photo
-        // Move photo out of 'new-images' storage to 'reviewed-images'
-        //
-        //
-        //
-        //
-        // IMPLEMENT ABOVE
 
         // Add photo to firestore
         firestore()

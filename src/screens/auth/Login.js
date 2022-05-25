@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native'
 import { useAuth } from '../../context/AuthContext'
-import SplashScreen from '../SplashScreen'
+import SplashScreen from '../app/SplashScreen'
 
 const Login = ({ navigation }) => {
     const { handleLogin, error, resetError, loading, checkKeychain } = useAuth()

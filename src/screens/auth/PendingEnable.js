@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { View, Button, Text, StyleSheet, ActivityIndicator } from 'react-native'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../../context/AuthContext'
 import auth from '@react-native-firebase/auth'
 
 const PendingEnable = ({ navigator }) => {

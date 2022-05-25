@@ -48,7 +48,7 @@ const Signup = ({ navigation }) => {
             />
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSignup(username, email, password, confirmPassword )}
+                onPress={() => handleSignup(username, email, password, confirmPassword)}
             >
                 <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>

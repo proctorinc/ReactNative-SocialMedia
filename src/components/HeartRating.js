@@ -1,50 +1,48 @@
-import { View, StyleSheet, Button } from 'react-native'
+import { View, StyleSheet, Button, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeartItem from './HeartItem'
-import firestore from '@react-native-firebase/firestore'
 import { useAuth } from '../context/AuthContext'
+import { confirmUserRating } from '../api/api'
 
-const HeartRating = () => {
+const HeartRating = ({ previousRating }) => {
     const { currentUser } = useAuth()
-    const [rating, setRating] = useState(0)
-    const [confirmed, setConfirmed] = useState(false)
-    // const [hearts, setHearts] = useState([])
+    const [rating, setRating] = useState(previousRating)
+    const [confirmed, setConfirmed] = useState(true)
     const hearts = []
 
-    for (let i = 1; i <= 5; i++) {
-        hearts.push(<HeartItem key={i} value={i} rating={rating} setRating={setRating} confirmed={confirmed} />)
+    const handleHeartPress = (value) => {
+        if (!confirmed) {
+            setRating(value)
+        } else {
+            alert('You already rated today')
+        }
     }
 
-    const confirmRating = () => {
-        const today = new Date().toLocaleDateString().replace(/\//g, '')
-        setConfirmed(true)
-        firestore()
-            .collection('ratings')
-            .doc(currentUser.uid + '_' + today)
-        .set({
-            rating: rating
-        })
-        .then(() => {
-            console.log('Rating added');
-        })
+    for (let i = 1; i <= 5; i++) {
+        hearts.push(<HeartItem key={i} value={i} rating={rating} onPress={handleHeartPress} confirmed={confirmed} />)
     }
 
     useEffect(() => {
-        console.log(rating)
+        if (previousRating == 0) {
+            setConfirmed(false)
+        }
     }, [rating])
 
     return (
-        <View>
+        <ScrollView>
             <View style={styles.container}>
                 {hearts}
             </View>
             {rating && !confirmed
                 ? <Button
-                    title={'confirm rating'}
-                    onPress={() => confirmRating()}
+                    title={'Confirm Rating'}
+                    onPress={async () => {
+                        await confirmUserRating(currentUser, rating)
+                        setConfirmed(true)
+                    }}
                     />
                 : null}
-        </View>
+        </ScrollView>
     )
 }
 

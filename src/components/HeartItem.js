@@ -2,7 +2,7 @@ import { TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { IconContext, Heart } from 'phosphor-react-native';
 
-const HeartItem = ({ value, rating, setRating, confirmed, style }) => {
+const HeartItem = ({ value, rating, onPress, confirmed, style }) => {
 
     const getStyle = () => {
         if (confirmed) {
@@ -16,7 +16,7 @@ const HeartItem = ({ value, rating, setRating, confirmed, style }) => {
                 return  {
                     color: '#FFF',
                     size: 64,
-                    weight: "duotone"
+                    weight: "fill"
                 }
             }
         } else {
@@ -40,11 +40,7 @@ const HeartItem = ({ value, rating, setRating, confirmed, style }) => {
         <IconContext.Provider value={getStyle()}>
             <View>
                 <TouchableOpacity
-                    onPress={() => {
-                        if (!confirmed) {
-                            setRating(value)
-                        }
-                    }}
+                    onPress={() => onPress(value)}
                     style={style}
                 >
                     <Heart />

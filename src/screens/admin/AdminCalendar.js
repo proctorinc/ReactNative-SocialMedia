@@ -1,8 +1,8 @@
-import { View, Text, FlatList, StyleSheet, Button, ActivityIndicator, TouchableOpacity, Modal } from 'react-native'
+import { View, Text, StyleSheet, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import WeekList from '../../components/admin/WeekList'
 import ScaledImage from '../../components/ScaledImage'
-import firestore from '@react-native-firebase/firestore'
+import { getImageByDate } from '../../api/api'
 
 const AdminCalendar = () => {
     // const { loading } = useAuth()
@@ -11,47 +11,16 @@ const AdminCalendar = () => {
     const [loading, setLoading] = useState(true)
     const [image, setImage] = useState(null)
 
-    const getImage = () => {
-        console.log('Fetching image...')
-        firestore().collection('images')
-            .where('date', '==', date.toLocaleDateString())
-            .limit(1)
-            .get()
-            .then(querySnapshot => {
-                if (querySnapshot.empty) {
-                    console.log('No Image')
-                    setImage(null)
-                } else {
-                    querySnapshot.forEach(snapshot => {
-                        console.log('Image Date: ' + snapshot.data().date)
-                        setImage(snapshot.data())
-                    })
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
-    }
-
     const getStartOfWeek = () => {
         d = new Date(date)
         const day = d.getDay()
         const diff = d.getDate() - day + (day == 0 ? -6 : 1) // For monday
         return new Date(d.setDate(diff))
-        // console.log('Before diff')
-        // console.log(date.toLocaleDateString)
-        // const diff = 7 - date.getDate()
-        // console.log('diff: ' + diff)
-        // return new Date(date.setDate(date.getDate() + diff))
     }
 
     const getDaysInWeek = () => {
-        console.log('Date:')
-        console.log(date.toLocaleDateString())
         setLoading(true)
         const newDate = getStartOfWeek()
-
-        console.log('newDate:')
-        console.log(newDate.toLocaleDateString())
 
         const newWeek = [
             {date: new Date(newDate.setDate(newDate.getDate()))},
@@ -63,17 +32,22 @@ const AdminCalendar = () => {
             {date: new Date(newDate.setDate(newDate.getDate() + 1))},
         ]
 
-        // console.log('newWeek:')
-        // newWeek.map((item) => {
-        //     console.log('\t' + item.date.toLocaleDateString())
-        // })
-
         setWeek(newWeek)
         setLoading(false)
     }
 
     const handleDateChange = (date) => {
         setDate(date)
+    }
+
+    const fetchImage = async () => {
+        await getImageByDate(date)
+            .then((image) => {
+                setImage(image)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     useEffect(() => {
@@ -83,8 +57,7 @@ const AdminCalendar = () => {
         if (!date) {
             setDate(new Date())
         }
-        getImage()
-        // console.log(week)
+        fetchImage()
     }, [date])
 
     if (loading || week.length == 0) {
