@@ -34,14 +34,21 @@ export const getUserRating = (user, date) => {
 
 export const confirmUserRating = (user, rating) => {
     const today = new Date().toLocaleDateString().replace(/\//g, '-')
-    firestore()
-        .collection(today)
-        .doc(user.uid)
-    .set({
-        rating: rating
-    })
-    .catch((err) => {
-        console.log(err)
+    return new Promise((resolve, reject) => {
+        firestore()
+            .collection(today)
+            .doc(user.uid)
+        .set({
+            rating: rating
+        })
+        .then(() => {
+            resolve(true)
+            
+        })
+        .catch((err) => {
+            console.log(err)
+            reject(err)
+        })
     })
 }
 

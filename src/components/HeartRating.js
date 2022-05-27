@@ -1,10 +1,11 @@
-import { View, StyleSheet, Button, ScrollView } from 'react-native'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeartItem from './HeartItem'
 import { useAuth } from '../context/AuthContext'
 import { confirmUserRating } from '../api/api'
+import { CheckCircle } from 'phosphor-react-native'
 
-const HeartRating = ({ previousRating }) => {
+const HeartRating = ({ previousRating, onRate, style }) => {
     const { currentUser } = useAuth()
     const [rating, setRating] = useState(previousRating)
     const [confirmed, setConfirmed] = useState(true)
@@ -29,26 +30,31 @@ const HeartRating = ({ previousRating }) => {
     }, [rating])
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                {hearts}
-            </View>
+        <View style={[style, styles.container]}>
+            {hearts}
             {rating && !confirmed
-                ? <Button
-                    title={'Confirm Rating'}
+                ? 
+                <TouchableOpacity
                     onPress={async () => {
                         await confirmUserRating(currentUser, rating)
-                        setConfirmed(true)
+                            .then(() => {
+                                setConfirmed(true)
+                                onRate()
+                            })
                     }}
-                    />
+                >
+                    <CheckCircle color={'green'} size={50} />
+                </TouchableOpacity>
                 : null}
-        </ScrollView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 })
 

@@ -102,7 +102,7 @@ const Main = () => {
                     )
                 }}
             /> */}
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Calendar"
                 component={AdminCalendar}
                 options={{
@@ -114,7 +114,7 @@ const Main = () => {
                         />
                     )
                 }}
-            />
+            /> */}
             {/* <Tab.Screen
                 name="Admin"
                 component={AdminApprove}

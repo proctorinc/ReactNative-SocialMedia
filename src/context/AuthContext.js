@@ -22,7 +22,8 @@ export const AuthProvider = ({ children }) => {
             reload()
         } catch (e) {
             console.log(e)
-        } -legacy
+        } 
+        // -legacy
     }
 
     const resetError = () => {
@@ -166,5 +167,3 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 }
-
-export default AuthContext

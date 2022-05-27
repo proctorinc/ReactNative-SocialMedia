@@ -1,72 +1,84 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, Share } from 'react-native'
 import HeartRating from '../../components/HeartRating';
 import ScaledImage from '../../components/ScaledImage';
-import { useAuth } from '../../context/AuthContext';
-import { ShareNetwork } from 'phosphor-react-native';
+import { Export } from 'phosphor-react-native';
 import { getUserRating, getImage } from '../../api/api'
+import { useDailyContext } from '../../context/DailyContext';
 
 const Daily = () => {
-    const { currentUser } = useAuth()
-    const [image, setImage] = useState(null)
-    const [rating, setRating] = useState(0)
-    const [imageLoaded, setImageLoaded] = useState(false)
-    const [ratingLoaded, setRatingLoaded] = useState(false)
+    const { myRating, dailyImage, imageLoaded, ratingLoaded, refreshUserRating } = useDailyContext()
 
-    const getImageAndRating = async () => {
-        const today = new Date()
-        await getImage(today)
-            .then((image) => {
-                setImage(image)
-                setImageLoaded(true)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        await getUserRating(currentUser, today)
-            .then((rating) => {
-                setRating(rating)
-                setRatingLoaded(true)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
+    const onShare = async () => {
+        /* react-native-share for image */
+        const heart = '❤'
+        try {
+          const result = await Share.share({
+            message:
+              heart.repeat(myRating),
+          });
+          if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+              // shared with activity type of result.activityType
+            } else {
+              // shared
+            }
+          } else if (result.action === Share.dismissedAction) {
+            // dismissed
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      }
 
     useEffect(() => {
-        getImageAndRating()
-        // return () => subscriber();
+        // const subscriber = getImageAndRating()
+        // return () => subscriber()
     }, [])
 
     return (
-        <View style={styles.view}>
-            <Text style={styles.title}>Today's Daily Gerth</Text>
-            <Text style={styles.text}>{new Date().toDateString()}</Text>
+        <View style={styles.container}>
+            <View style={styles.titleView}>
+                <Text style={styles.title}>Today's Daily Gerth</Text>
+                <Text style={styles.text}>{new Date().toDateString()}</Text>
+            </View>
             {!imageLoaded
                 ? <Text>Loading...</Text>
-                : <View>
-                    <ScaledImage uri={image.url} style={styles.image} />
-                    <TouchableOpacity
-                        style={styles.iconOnImage}
-                        onPress={() => console.log('Share!')}
+                : <View style={styles.imageView}>
+                    <ScaledImage uri={dailyImage.url} style={styles.image} />
+                    {!myRating
+                    ? null
+                    : <TouchableOpacity
+                        style={styles.shareIcon}
+                        onPress={() => onShare()}
                     >
-                        <ShareNetwork color={'#111'} size={32} />
-                    </TouchableOpacity>
+                        <Export color={'#ffcfcf'} size={24} />
+                    </TouchableOpacity>}
                 </View>}
             {!ratingLoaded
             ? <Text>Loading</Text>
-            : <HeartRating style={styles.rating} previousRating={rating}/>}
+            : <HeartRating style={styles.rating} previousRating={myRating} onRate={refreshUserRating}/>}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    view: {
+    container: {
         height: '100%',
         alignItems: 'center',
-        backgroundColor: '#F4F4F4', //#121212
+        backgroundColor: '#F4F4F4',
         justifyContent: 'center',
-        width: '100%'
+        width: '100%',
+        flexDirection: 'column',
+    },
+    imageView: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    titleView: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexGrow: 1
     },
     title: {
         textAlign: 'center',
@@ -75,19 +87,22 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 18,
-        // paddingBottom: 15,
     },
     image: {
         width: '100%',
         height: undefined,
     },
-    iconOnImage: {
+    shareIcon: {
         backgroundColor: '#FD8D8D',
         position: 'absolute', 
         bottom: 20,
         right: 20,
         borderRadius: 100,
         padding: 10,
+        // opacity: 0.8,
+    },
+    rating: {
+        flexGrow: 1
     }
 });
 
