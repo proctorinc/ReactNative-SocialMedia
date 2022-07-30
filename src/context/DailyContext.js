@@ -15,7 +15,6 @@ export const DailyContextProvider = ({ children }) => {
     const [imageLoaded, setImageLoaded] = useState(false)
     const [ratingLoaded, setRatingLoaded] = useState(false)
     const [today, setToday] = useState(new Date())
-    // const [dailyContextLoaded, setDailyContextLoaded] = useState(false)
 
     const fetchImage = async () => {
         await getImage(today)

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect } from 'react'
+import React from 'react'
 import UserProfileHeader from '../../components/UserProfileHeader'
 import UserRatings from '../../components/UserRatings'
 import { useAuth } from '../../context/AuthContext'
@@ -12,9 +12,6 @@ const DailyResults = () => {
 
     const date = new Date().toLocaleDateString().replace(/\//g, '-')
 
-    useEffect(() => {
-      console.log('Rating Changed: ' + myRating)
-    }, [myRating])
   return (
     <View style={styles.container}>
       <UserProfileHeader username={currentUser.displayName} />
@@ -22,7 +19,8 @@ const DailyResults = () => {
         <Text style={styles.header}>My Rating:</Text>
         <View style={styles.ratingView}>
             {myRating == 0
-            ? <Text style={styles.text}>No Rating yet</Text>
+            ? <HeartNumber size={100} value={'?'} />
+            // <Text style={styles.text}>No Rating yet</Text>
             : <HeartNumber value={myRating} size={100}/>}
         </View>
       </View>

@@ -17,7 +17,7 @@ const UserProfile = ({ username }) => {
             <Text style={styles.header}>{username}'s favorite Gerth:</Text>
             <Image
                 style={styles.favoriteImage}
-                source={require('../../assets/images/20211211_194448.jpg')}
+                source={{ uri: currentUser.photoURL }}
                 resizeMethod='scale'
             />
             <Text style={styles.header}>Stats:</Text>

@@ -19,9 +19,10 @@ const UserProfileHeader = ({ username }) => {
         >
             <Avatar
                 size="large"
-                title={username.substring(0, 2).toUpperCase()}
+                // title={username.substring(0, 2).toUpperCase()}
+                source={{ uri: currentUser.photoURL }}
                 rounded
-                overlayContainerStyle={{ backgroundColor: 'gray' }}
+                // overlayContainerStyle={{ backgroundColor: 'gray' }}
             />
             {isSelf
             ? <Pencil style={styles.edit} />

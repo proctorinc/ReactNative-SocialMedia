@@ -5,9 +5,11 @@ import ScaledImage from '../../components/ScaledImage';
 import { Export } from 'phosphor-react-native';
 import { getUserRating, getImage } from '../../api/api'
 import { useDailyContext } from '../../context/DailyContext';
+import { useAuth } from '../../context/AuthContext';
 
 const Daily = () => {
     const { myRating, dailyImage, imageLoaded, ratingLoaded, refreshUserRating } = useDailyContext()
+    const { currentUser } = useAuth()
 
     const onShare = async () => {
         /* react-native-share for image */
@@ -31,9 +33,17 @@ const Daily = () => {
         }
       }
 
+      const setImageURL = () => {
+        currentUser.updateProfile({
+            photoURL: 'gs://thedailygerth.appspot.com/profile-picture/B064CCDC-478D-4B94-A317-DCCB84B9DC9C.jpeg'
+        })
+      }
+
     useEffect(() => {
         // const subscriber = getImageAndRating()
         // return () => subscriber()
+        
+        setImageURL()
     }, [])
 
     return (

@@ -3,28 +3,25 @@ import React, { useEffect, useState } from 'react'
 import { Avatar } from '@rneui/base'
 import firestore from '@react-native-firebase/firestore'
 import HeartNumber from './HeartNumber'
+import { LockKey } from 'phosphor-react-native'
+import { fetchAllRatings } from '../api/api'
 
 const UserRatings = ({ date, rating }) => {
     const [ratings, setRatings] = useState([])
 
-    const fetchAllRatings = () => {
-        firestore()
-            .collection(String(date))
-            .orderBy('rating', 'desc')
-            .onSnapshot(querySnapshot => {
-                setRatings([])
-                querySnapshot.forEach(async snapshot => {
-                    const user = await firestore()
-                        .collection('users')
-                        .doc(snapshot.id)
-                        .get()
-                    setRatings(old => [...old, {username: user.data().username, rating: snapshot.data().rating}])
-                })
+    const fetchUserRatings = async () => {
+        await fetchAllRatings(date)
+            .then((userRatings) => {
+                console.log(userRatings)
+                setRatings(userRatings)
+            })
+            .catch((err) => {
+                console.log(err)
             })
     }
 
     useEffect(() => {
-        fetchAllRatings()
+        fetchUserRatings()
     }, [])
 
   return (
@@ -32,8 +29,11 @@ const UserRatings = ({ date, rating }) => {
         <Text style={styles.header}>User Ratings:</Text>
         {rating == 0
             ? <View style={styles.ratingView}>
-                <Text style={styles.noRatingText}>Rate today's Gerth before</Text>
-                <Text style={styles.noRatingText}>you see everyone's ratings</Text>
+                <View style={styles.roundContainer}>
+                    <LockKey size={64} weight={'light'}/>
+                    <Text style={styles.noRatingText}>Rate today's Gerth</Text>
+                    <Text style={styles.noRatingText}>to see other ratings</Text>
+                </View>
             </View>
             : <FlatList
                 style={styles.list}
@@ -102,9 +102,18 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         alignItems: 'center',
-        // height: '100%',
         flexGrow: 1,
     },
+    roundContainer: {
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 1000,
+        backgroundColor: 'lightgray',
+        padding: 20,
+        height: 200,
+        width: 200,
+    }
 });
 
 export default UserRatings

@@ -22,17 +22,13 @@ const HeartItem = ({ value, rating, onPress, confirmed, style }) => {
         } else {
             if (value <= rating && !confirmed) {
                 return  {
-                    // color: '#FD8D8D',
-                    // color: '#ffb3b3',
-                    // size: 64,
-                    // weight: "fill"
                     color: '#FD8D8D',
                     size: 64,
                     weight: "duotone"
                 }
             } else {
                 return {
-                    color: 'lightgray',
+                    color: 'gray',
                     size: 64,
                     weight: 'thin'
                 }

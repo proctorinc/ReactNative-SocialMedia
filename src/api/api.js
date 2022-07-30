@@ -88,3 +88,27 @@ export const checkIfDateHasImage = (date) => {
             })
     })
 }
+
+export const fetchAllRatings = (date) => {
+    const ratings = []
+    return new Promise((resolve, reject) => {
+        firestore()
+            .collection(String(date))
+            .orderBy('rating', 'desc')
+            .onSnapshot(querySnapshot => {
+                querySnapshot.forEach(async snapshot => {
+                    const user = await firestore()
+                        .collection('users')
+                        .doc(snapshot.id)
+                        .get()
+                        console.log(user.data().username)
+                    ratings.push({username: user.data().username, rating: snapshot.data().rating})
+                })
+                resolve(ratings)
+            })
+    })
+}
+
+export const getProfilePicture = (user) => {
+    firestore()
+}
